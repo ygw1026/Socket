@@ -43,7 +43,7 @@ public class MessageServer implements Runnable {
         while(true) {
             try(Socket client = serverSocket.accept();
                 BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+                PrintWriter out = new PrintWriter(client.getOutputStream(),false);
             ){
                 InetAddress inetAddress = client.getInetAddress();
                 log.debug("ip:{},port:{}", inetAddress.getAddress(), client.getPort());
@@ -64,6 +64,7 @@ public class MessageServer implements Runnable {
                         sendMessage=String.format("{%s} method not found!",methodAndValue.getMethod());
                     }
                     out.println(sendMessage);
+                    out.flush();
                 }
             }catch (Exception e){
                 log.debug("{}",e.getMessage(),e);

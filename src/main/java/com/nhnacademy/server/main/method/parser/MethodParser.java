@@ -3,8 +3,11 @@ package com.nhnacademy.server.main.method.parser;
 public class MethodParser {
     public static MethodAndValue parse(String message){
         String messages[] = message.split(" ");
-        if(messages.length>=2){
-            return new MethodAndValue(messages[0],messages[1]);
+        if(messages.length>0) {
+            if (messages.length == 1) {
+                return new MethodAndValue(messages[0], "");
+            }
+            return new MethodAndValue(messages[0], messages[1]);
         }
         return null;
     }
