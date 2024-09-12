@@ -57,6 +57,7 @@ public class MessageServer implements Runnable {
                     log.debug("method:{},value:{}",methodAndValue.getMethod(),methodAndValue.getValue());
                     Response response = ResponseFactory.getResponse(methodAndValue.getMethod());
                     String sendMessage;
+
                     if(Objects.nonNull(response)){
                         sendMessage = response.execute(methodAndValue.getValue());
                     }else {
