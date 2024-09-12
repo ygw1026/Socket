@@ -1,4 +1,4 @@
-package com.nhnacademy.server.main.method.response.exception;
+package com.nhnacademy.server.method.response.exception;
 
 public class ResponseNotFoundException extends RuntimeException{
     public ResponseNotFoundException() {

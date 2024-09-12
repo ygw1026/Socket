@@ -1,4 +1,4 @@
-package com.nhnacademy.server.main.method.parser;
+package com.nhnacademy.server.method.parser;
 
 public class MethodParser {
     public static MethodAndValue parse(String message){

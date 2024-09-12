@@ -1,4 +1,4 @@
-package com.nhnacademy.server.main.method.response;
+package com.nhnacademy.server.method.response;
 
 public interface Response {
 

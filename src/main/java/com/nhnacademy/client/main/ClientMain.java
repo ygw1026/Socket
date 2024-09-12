@@ -1,10 +1,9 @@
 package com.nhnacademy.client.main;
 
-import com.nhnacademy.client.server.MessageClient;
+import com.nhnacademy.client.runable.MessageClient;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.net.Socket;
 
 @Slf4j
 public class ClientMain {

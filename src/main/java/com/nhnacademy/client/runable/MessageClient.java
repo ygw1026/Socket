@@ -1,4 +1,4 @@
-package com.nhnacademy.client.server;
+package com.nhnacademy.client.runable;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

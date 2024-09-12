@@ -1,6 +1,6 @@
-package com.nhnacademy.server.main.method.response.impl;
+package com.nhnacademy.server.method.response.impl;
 
-import com.nhnacademy.server.main.method.response.Response;
+import com.nhnacademy.server.method.response.Response;
 
 public class EchoResponse implements Response {
     private final static String METHOD = "echo";

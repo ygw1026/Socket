@@ -1,9 +1,8 @@
-package com.nhnacademy.server.main.method.response;
+package com.nhnacademy.server.method.response;
 
-import com.nhnacademy.server.main.method.response.exception.ResponseNotFoundException;
-import com.nhnacademy.server.main.method.response.impl.EchoResponse;
-import com.nhnacademy.server.main.method.response.impl.PortResponse;
-import com.nhnacademy.server.main.method.response.impl.TimeResponse;
+import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
+import com.nhnacademy.server.method.response.impl.EchoResponse;
+import com.nhnacademy.server.method.response.impl.TimeResponse;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.Objects;
 public class ResponseFactory {
     private static final ArrayList<Response> responseList = new ArrayList<>(){{
         add(new EchoResponse());
-        add(new PortResponse());
         add(new TimeResponse());
     }};
 

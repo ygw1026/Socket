@@ -1,8 +1,8 @@
-package com.nhnacademy.server.main.server;
+package com.nhnacademy.server.runable;
 
-import com.nhnacademy.server.main.method.parser.MethodParser;
-import com.nhnacademy.server.main.method.response.Response;
-import com.nhnacademy.server.main.method.response.ResponseFactory;
+import com.nhnacademy.server.method.parser.MethodParser;
+import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.server.method.response.ResponseFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;

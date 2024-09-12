@@ -1,6 +1,6 @@
 package com.nhnacademy.server.main;
 
-import com.nhnacademy.server.main.server.MessageServer;
+import com.nhnacademy.server.runable.MessageServer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
