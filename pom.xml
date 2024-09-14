@@ -74,13 +74,10 @@
   </dependencies>
 
   <build>
-    <finalName>server</finalName>
     <plugins>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-
         <executions>
 
           <execution>
@@ -112,45 +109,6 @@
                   <mainClass>com.nhnacademy.client.main.ClientMain</mainClass>
                 </transformer>
               </transformers>
-            </configuration>
-          </execution>
-
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.4.1</version>
-        <executions>
-
-          <execution>
-            <id>run-server</id>
-            <phase>package</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>java</executable>
-              <arguments>
-                <argument>-jar</argument>
-                <argument>${project.build.directory}/server-shade.jar</argument>
-              </arguments>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>run-client</id>
-            <phase>package</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>java</executable>
-              <arguments>
-                <argument>-jar</argument>
-                <argument>${project.build.directory}/client-shade.jar</argument>
-              </arguments>
             </configuration>
           </execution>
 
