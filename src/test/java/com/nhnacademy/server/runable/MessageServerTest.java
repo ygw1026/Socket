@@ -30,7 +30,7 @@ class MessageServerTest {
 
     @BeforeAll
     static void beforeAllSetup(){
-        messageServer = new MessageServer(8888);
+        messageServer = new MessageServer(9999);
         thread = new Thread(messageServer);
         thread.start();
     }
@@ -49,9 +49,9 @@ class MessageServerTest {
     @Order(2)
     @DisplayName("aready used port")
     void constructorTest2(){
-        //TODO#1-12 이미 서버는 8888 port를 사용하고 있을 때 8888포트로 서버를 시작한다면 RuntimeException 발생하는지 검증 합니다.
+        //TODO#1-12 이미 서버는 9999 port를 사용하고 있을 때 9999포트로 서버를 시작한다면 RuntimeException 발생하는지 검증 합니다.
         Assertions.assertThrows(RuntimeException.class,()->{
-            MessageServer messageServer2 = new MessageServer(8888);
+            MessageServer messageServer2 = new MessageServer(9999);
             new Thread(messageServer2).start();
         });
     }
@@ -60,11 +60,11 @@ class MessageServerTest {
     @Order(3)
     @DisplayName("echo message")
     void echoMessageTest() throws IOException {
-        /*TODO#1-13 8888 port를 사용하고 있는 echo 서버에 접근하기 위헤서 client socket을 생성 합니다.
+        /*TODO#1-13 9999 port를 사용하고 있는 echo 서버에 접근하기 위헤서 client socket을 생성 합니다.
             - host : localhost
-            - port : 8888
+            - port : 9999
          */
-        Socket client = new Socket("localhost", 8888);
+        Socket client = new Socket("localhost", 9999);
 
         /*TODO#1-14 간단한 test client 구현
           - cleint 가 server에 메시지를 전송하기 위해서 PrintWriter 객체를 사용할 수 있도록 초기화 합니다.
@@ -105,9 +105,10 @@ class MessageServerTest {
     }
 
     @AfterAll
-    static void tearDown(){
+    static void tearDown() throws InterruptedException {
         // TODO#1-17 모든 테스트가 종료되면 server를 구동하고있는 thread에 interrupt()를 발생시켜 종료 합니다.
         thread.interrupt();
+        Thread.sleep(2000);
     }
 
 }

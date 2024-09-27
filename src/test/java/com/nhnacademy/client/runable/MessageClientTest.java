@@ -94,7 +94,8 @@ class MessageClientTest {
     }
 
     @AfterAll
-    static void tearDown(){
+    static void tearDown() throws InterruptedException {
         serverThread.interrupt();
+        Thread.sleep(2000);
     }
 }
