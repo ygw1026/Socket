@@ -20,6 +20,10 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
+
+import com.nhnacademy.server.method.parser.MethodParser;
+import com.nhnacademy.server.method.response.Response;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,6 +67,19 @@ public class MessageServer implements Runnable {
                 while ((recvMessage = clientIn.readLine()) != null) {
                     System.out.println("[server]recv-message:" + recvMessage);
 
+                    MethodParser.MethodAndValue methodAndValue = null;
+
+                    log.debug("method:{}, value:{}", methodAndValue.getMethod(), methodAndValue.getValue());
+
+                    Response response = null;
+
+                    String sendMessage;
+                    if(Objects.nonNull(response)) {
+                        sendMessage = null;
+                    } else {
+                        sendMessage = "something";
+                    }
+                    
                     out.println(recvMessage);
                     out.flush();
                 }
