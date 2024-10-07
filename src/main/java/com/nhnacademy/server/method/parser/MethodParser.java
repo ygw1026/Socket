@@ -1,8 +1,14 @@
 package com.nhnacademy.server.method.parser;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class MethodParser {
     
     public static MethodAndValue parse(String message) {
+
+        if (StringUtils.isEmpty(message)) {
+            return null;
+        }
         String messages[] = message.split(" ");
         if(messages.length>0) {
             if (messages.length == 1) {

@@ -53,13 +53,10 @@ import lombok.extern.slf4j.Slf4j;
              System.out.print("send-message:");
              String userMessage;
  
-             /*TODO#2-6 while 조건을 수정하세요
-                 - stdIn.readLine()  : 사용자로 부터 입력받은 값이 null 아니라면 입력받은 userMessage를 PrintWriter out을 이용해서 서버로 전송 합니다.
-              */
              while ((userMessage = stdIn.readLine()) != null){
                 out.println(userMessage);
                 //System.out.println 을 log.debug 로 바꿔도 결과가 같나?
-                 System.out.println(String.format("[clinet]recv-message:%s",clientIn.readLine()));
+                 System.out.println(String.format("[client]recv-message:%s",clientIn.readLine()));
                  System.out.print("send-message:");
              }
  
