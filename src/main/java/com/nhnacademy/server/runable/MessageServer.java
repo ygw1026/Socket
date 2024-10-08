@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import com.nhnacademy.server.method.parser.MethodParser;
 import com.nhnacademy.server.method.response.Response;
+import com.nhnacademy.server.method.response.ResponseFactory;
+import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,20 +69,27 @@ public class MessageServer implements Runnable {
                 while ((recvMessage = clientIn.readLine()) != null) {
                     System.out.println("[server]recv-message:" + recvMessage);
 
-                    MethodParser.MethodAndValue methodAndValue = null;
+                    MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
 
                     log.debug("method:{}, value:{}", methodAndValue.getMethod(), methodAndValue.getValue());
 
                     Response response = null;
 
+                    try {
+                        response = ResponseFactory.getResponse(methodAndValue.getMethod());
+                    }catch (ResponseNotFoundException re) {
+                        log.debug("response not found : {}", re.getMessage());
+                    }
+
                     String sendMessage;
+
                     if(Objects.nonNull(response)) {
-                        sendMessage = null;
+                        sendMessage = response.execute(methodAndValue.getValue());
                     } else {
-                        sendMessage = "something";
+                        sendMessage = String.format("{%s} method not found!", methodAndValue.getMethod());
                     }
                     
-                    out.println(recvMessage);
+                    out.println(sendMessage);
                     out.flush();
                 }
             } catch (Exception e) {

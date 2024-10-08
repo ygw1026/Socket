@@ -5,10 +5,12 @@ import java.util.Objects;
 
 import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
 import com.nhnacademy.server.method.response.impl.EchoResponse;
+import com.nhnacademy.server.method.response.impl.TimeResponse;
 
 public class ResponseFactory {
     private static final ArrayList<Response> responseList = new ArrayList<>(){{
         add(new EchoResponse());
+        add(new TimeResponse());
     }};
 
     public static Response getResponse(String method) {
