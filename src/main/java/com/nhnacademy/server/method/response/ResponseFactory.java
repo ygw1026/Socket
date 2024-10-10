@@ -2,22 +2,30 @@ package com.nhnacademy.server.method.response;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Set;
 
-import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
-import com.nhnacademy.server.method.response.impl.BroadCastResponse;
-import com.nhnacademy.server.method.response.impl.EchoResponse;
-import com.nhnacademy.server.method.response.impl.LoginResponse;
-import com.nhnacademy.server.method.response.impl.PortResponse;
-import com.nhnacademy.server.method.response.impl.TimeResponse;
+import org.reflections.Reflections;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ResponseFactory {
-    private static final ArrayList<Response> responseList = new ArrayList<>(){{
-        add(new EchoResponse());
-        add(new TimeResponse());
-        add(new PortResponse());
-        add(new LoginResponse());
-        add(new BroadCastResponse());
-    }};
+    private static final ArrayList<Response> responseList = new ArrayList<>();
+
+    static {
+        Reflections reflections = new Reflections("com.nhnacademy.server");
+        Set<Class<? extends Response>> classes = reflections.getSubTypesOf(Response.class);
+
+        for (Class<? extends Response> clazz : classes) {
+            try {
+                Response response = clazz.getDeclaredConstructor().newInstance();
+                log.debug("response-factory init : instance : {}", response.getClass().getName());
+                responseList.add(response);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static Response getResponse(String method) {
         Response response = responseList.stream()
@@ -25,7 +33,7 @@ public class ResponseFactory {
                             .findFirst()
                             .orElse(null);
         if(Objects.isNull(response)) {
-            throw new ResponseNotFoundException();
+            log.error("response not found : {}", method);
         }
         return response;
     }
