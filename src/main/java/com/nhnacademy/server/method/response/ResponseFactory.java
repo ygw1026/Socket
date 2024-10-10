@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
+import com.nhnacademy.server.method.response.impl.BroadCastResponse;
 import com.nhnacademy.server.method.response.impl.EchoResponse;
+import com.nhnacademy.server.method.response.impl.LoginResponse;
 import com.nhnacademy.server.method.response.impl.PortResponse;
 import com.nhnacademy.server.method.response.impl.TimeResponse;
 
@@ -13,6 +15,8 @@ public class ResponseFactory {
         add(new EchoResponse());
         add(new TimeResponse());
         add(new PortResponse());
+        add(new LoginResponse());
+        add(new BroadCastResponse());
     }};
 
     public static Response getResponse(String method) {

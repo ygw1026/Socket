@@ -27,7 +27,7 @@ public class ReceivedMessageClient implements Runnable{
 
     @Override
     public void run() {
-        while(! Thread.currentThread().isInterrupted()) {
+        while(true) {
             try (InputStream inputStream = socket.getInputStream();
                 BufferedReader clientIn = new BufferedReader(new InputStreamReader(inputStream));
             ){

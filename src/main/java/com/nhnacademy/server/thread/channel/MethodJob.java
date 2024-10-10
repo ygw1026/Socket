@@ -48,6 +48,7 @@ public class MethodJob implements Executable{
                 Response response = ResponseFactory.getResponse(methodAndValue.getMethod());
 
                 String sendMessage;
+
                 if (Objects.nonNull(response)) {
                     sendMessage = response.execute(methodAndValue.getValue());
                 }else {
@@ -59,11 +60,6 @@ public class MethodJob implements Executable{
             }
         }catch (Exception e) {
             log.debug("thread-error:{}", e.getMessage(), e);
-
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
-
         }finally {
             try {
                 if (Objects.nonNull(client)) {
