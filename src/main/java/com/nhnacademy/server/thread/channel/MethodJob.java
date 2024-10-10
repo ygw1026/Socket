@@ -11,6 +11,7 @@ import java.util.Objects;
 import com.nhnacademy.server.method.parser.MethodParser;
 import com.nhnacademy.server.method.response.Response;
 import com.nhnacademy.server.method.response.ResponseFactory;
+import com.nhnacademy.server.runable.MessageServer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +28,8 @@ public class MethodJob implements Executable{
 
     @Override
     public void execute() {
+        Session.initializeSocket(this.client);
+
         try (
             BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter out = new PrintWriter(client.getOutputStream(), false);
@@ -66,10 +69,16 @@ public class MethodJob implements Executable{
                 if (Objects.nonNull(client)) {
                     client.close();
                     log.debug("client 정상종료");
+
+                    if(Session.isLogin()) {
+                        MessageServer.removeClient(Session.getCurrentId());
+                    }
                 }
             }catch (IOException e) {
                 log.error("error-client-close : {}", e.getMessage(), e);
             }
+
+            Session.reset();
         }
     }
 }

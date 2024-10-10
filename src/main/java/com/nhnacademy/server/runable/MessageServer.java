@@ -12,20 +12,20 @@
 
 package com.nhnacademy.server.runable;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
-import com.nhnacademy.server.method.parser.MethodParser;
-import com.nhnacademy.server.method.response.Response;
-import com.nhnacademy.server.method.response.ResponseFactory;
-import com.nhnacademy.server.method.response.exception.ResponseNotFoundException;
+import org.apache.commons.lang3.StringUtils;
+
+import com.nhnacademy.server.thread.channel.MethodJob;
+import com.nhnacademy.server.thread.channel.RequestChannel;
+import com.nhnacademy.server.thread.pool.RequestHandler;
+import com.nhnacademy.server.thread.pool.WorkerThreadPool;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +35,10 @@ public class MessageServer implements Runnable {
     private static final int DEFAULT_PORT=8888;
     private final int port;
     private final ServerSocket serverSocket;
+    private final WorkerThreadPool workerThreadPool;
+    private final RequestChannel requestChannel;
+
+    private static final Map<String, Socket> clientMap = new ConcurrentHashMap<>();
 
     public MessageServer(){
         this(DEFAULT_PORT);
@@ -52,52 +56,47 @@ public class MessageServer implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        requestChannel = new RequestChannel();
+        workerThreadPool = new WorkerThreadPool(new RequestHandler(requestChannel));
     }
 
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()) {
-            try (Socket client = serverSocket.accept();
-                 BufferedReader clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                 PrintWriter out = new PrintWriter(client.getOutputStream(), false);
-                ){
-                InetAddress inetAddress = client.getInetAddress();
-                log.debug("ip:{}, port:{}", inetAddress.getAddress(), client.getPort());
 
-                String recvMessage = null;
+        workerThreadPool.start();
 
-                while ((recvMessage = clientIn.readLine()) != null) {
-                    System.out.println("[server]recv-message:" + recvMessage);
-
-                    MethodParser.MethodAndValue methodAndValue = MethodParser.parse(recvMessage);
-
-                    log.debug("method:{}, value:{}", methodAndValue.getMethod(), methodAndValue.getValue());
-
-                    Response response = null;
-
-                    try {
-                        response = ResponseFactory.getResponse(methodAndValue.getMethod());
-                    }catch (ResponseNotFoundException re) {
-                        log.debug("response not found : {}", re.getMessage());
-                    }
-
-                    String sendMessage;
-
-                    if(Objects.nonNull(response)) {
-                        sendMessage = response.execute(methodAndValue.getValue());
-                    } else {
-                        sendMessage = String.format("{%s} method not found!", methodAndValue.getMethod());
-                    }
-                    
-                    out.println(sendMessage);
-                    out.flush();
-                }
-            } catch (Exception e) {
+        while(true) {
+            try{
+                Socket client = serverSocket.accept();
+                requestChannel.addJob(new MethodJob(client));
+            }catch (Exception e) {
                 log.debug("{}", e.getMessage(), e);
-                if(e instanceof InterruptedIOException) {
-                    Thread.currentThread().interrupt();
-                }
             }
+        }
+    }
+
+    public static boolean addClient(String id, Socket client) {
+        if(clientMap.containsKey(id)) {
+            log.debug("id:{}, already exist client socket!", id);
+            return false;
+        }
+
+        clientMap.put(id, client);
+        return true;
+    }
+
+    public static List<String> getClientIds() {
+        return clientMap.keySet().stream().collect(Collectors.toList());
+    }
+
+    public static Socket getClientSocket(String id) {
+        return clientMap.get(id);
+    }
+
+    public static void removeClient(String id) {
+        if(StringUtils.isNotEmpty(id)) {
+            clientMap.remove(id);
         }
     }
 }
