@@ -9,12 +9,15 @@ public class MethodParser {
         if (StringUtils.isEmpty(message)) {
             return null;
         }
+
         String messages[] = message.split(" ");
+        
         if(messages.length>0) {
             if (messages.length == 1) {
                 return new MethodAndValue(messages[0], "");
             }
-            return new MethodAndValue(messages[0], messages[1]);
+            String value = message.substring(messages[0].length());
+            return new MethodAndValue(messages[0], value.trim());
         }
         return null;
     }

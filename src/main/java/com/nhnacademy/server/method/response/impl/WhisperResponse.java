@@ -22,12 +22,12 @@ public class WhisperResponse implements Response{
             return "login required";
         }
         if(StringUtils.isEmpty(value)){
-            return "empty message!";
+            return "empty message!(value is empty)";
         }
         
         String[] values = value.split(" ");
         if(values.length<2){
-            return "empty message!";
+            return "empty message!(values < 2)";
         }
 
         String id = values[0];
